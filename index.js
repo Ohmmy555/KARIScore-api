@@ -15,7 +15,7 @@ app.get("/", function(req, res) {
 });
 
 var dbConn = mysql.createConnection({
-    host: "https://ns23.hostinglotus.net/phpMyAdmin/",
+    host: "119.59.104.13",
     user: "supphita",
     password: "0646267404",
     database: "supphita_kariscore",
