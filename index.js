@@ -11,7 +11,7 @@ app.use(
 );
 
 app.get("/", function(req, res) {
-    return res.send({ error: true, message: "Test Employee Web API" });
+    return res.send({ error: true, message: "Welcome to KARI Web API", By: "KARI IT CP KKU 14" });
 });
 
 var dbConn = mysql.createConnection({
