@@ -15,10 +15,10 @@ app.get("/", function(req, res) {
 });
 
 var dbConn = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "Kariscore",
+    host: "https://ns23.hostinglotus.net/phpMyAdmin/",
+    user: "supphita",
+    password: "0646267404",
+    database: "supphita_kariscore",
 });
 
 dbConn.connect();
