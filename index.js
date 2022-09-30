@@ -51,22 +51,23 @@ app.put("/login/:email", function(req, res) {
 
 app.post('/signup/student', function(req, res) {
     let data = req.body;
-    let stdid = data["std_id"];
-    let stdname = data["std_name"];
-    let stdemail = data["std_email"];
-    let stdpassword = dara["std_password"];
+    // let stdid = data["std_id"];
+    // let stdname = data["std_name"];
+    // let stdemail = data["std_email"];
+    // let stdpassword = dara["std_password"];
     let type = '1';
     if (!stdid) {
         return res.status(400).send({ error: true, message: 'Please provide student id and student data' });
     }
-    dbConn.query('INSERT INTO Users(student_id, user_name, user_email, user_pass, idUser_type) VALUES(?)', [stdid, stdname, stdemail, stdpassword, type], function(error, results, fields) {
-        if (error) throw error;
-        if (results[0]) {
-            return res.send(results[0]);
-        } else {
-            return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
-        }
-    });
+    dbConn.query('INSERT INTO Users(student_id, user_name, user_email, user_pass, idUser_type) VALUES ?', stdid,
+        function(error, results, fields) {
+            if (error) throw error;
+            if (results[0]) {
+                return res.send(results[0]);
+            } else {
+                return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
+            }
+        });
     //return JSON.parse({ stdid: true })
 })
 
