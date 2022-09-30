@@ -51,10 +51,10 @@ app.put("/login/:email", function(req, res) {
 
 app.post('/signup/student', function(req, res) {
     let data = req.body;
-    let stdid = data['std_id'];
-    let stdname = data['std_name'];
-    let stdemail = data['std_email'];
-    let stdpassword = dara['std_password'];
+    let stdid = data["std_id"];
+    let stdname = data["std_name"];
+    let stdemail = data["std_email"];
+    let stdpassword = dara["std_password"];
     let type = '1';
     if (!stdid) {
         return res.status(400).send({ error: true, message: 'Please provide student id and student data' });
