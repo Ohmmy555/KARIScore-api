@@ -55,7 +55,7 @@ app.post('/signup/student', function(req, res) {
     let stdname = data['std_name'];
     let stdemail = data['std_email'];
     let stdpassword = dara['std_password'];
-    let type = 1
+    let type = '1';
     if (!stdid) {
         return res.status(400).send({ error: true, message: 'Please provide student id and student data' });
     }
