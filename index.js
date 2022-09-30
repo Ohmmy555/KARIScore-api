@@ -49,7 +49,7 @@ app.put("/login/:email", function(req, res) {
         });
 })
 
-app.post('/signup/student', function(req, res) {
+app.post('/signup', function(req, res) {
     var data = req.body;
     return JSON.parse({ data: true })
         // let stdid = data["std_id"];
