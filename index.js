@@ -59,7 +59,7 @@ app.post('/signup/student', function(req, res) {
     if (!stdid) {
         return res.status(400).send({ error: true, message: 'Please provide student id and student data' });
     }
-    dbConn.query('INSERT INTO Users(student_id, user_name, user_email, user_pass, idUser_type) VALUES ?', stdid,
+    dbConn.query('INSERT INTO Users(student_id, user_name, user_email, user_pass, idUser_type) VALUES ?', data,
         function(error, results, fields) {
             if (error) throw error;
             if (results[0]) {
