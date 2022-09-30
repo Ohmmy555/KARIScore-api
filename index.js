@@ -30,14 +30,14 @@ app.get("/allsubject", function(req, res) {
     });
 });
 
-app.put("/login/:email", function(req, res) {
+app.get("/login/:email", function(req, res) {
     let email = req.params.email;
     let data = req.body;
     let password = data["password"];
     if (!email) {
         return res.status(400).send({ error: true, message: 'Please provide email' });
     }
-    dbConn.query('SELECT * FROM Users WHERE user_email = ? and user_pass = ?', [email, password],
+    dbConn.query('SELECT * FROM Users WHERE user_email = ?', email,
         function(error, results, fields) {
             if (error) throw error;
             if (results[0]) {
