@@ -48,7 +48,7 @@ app.put("/login/:email", function(req, res) {
         });
 })
 
-app.put('/signup/student', function(req, res) {
+app.post('/signup/student', function(req, res) {
     let data = req.body;
     let stdid = data['std_id'];
     let stdname = data['std_name'];
