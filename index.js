@@ -30,6 +30,23 @@ app.get("/allsubject", function(req, res) {
     });
 });
 
+app.get("/login/:email", function(req, res) {
+    let email = req.params.email;
+    let data = req.body;
+    let password = data["password"];
+    if (!email) {
+        return res.status(400).send({ error: true, message: 'Please provide email' });
+    }
+    dbConn.query('SELECT * FROM Users WHERE user_email = ? and password = ?', [email, password],
+        function(error, results, fields) {
+            if (error) throw error;
+            if (results[0]) {
+                return res.send(results[0]);
+            } else {
+                return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
+            }
+        });
+})
 
 //set port
 app.listen(4000, function() {
