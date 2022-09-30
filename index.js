@@ -49,28 +49,41 @@ app.put("/login/:email", function(req, res) {
         });
 })
 
-app.post('/signup:id', function(req, res) {
-    var data = req.body;
-    var id = req.params.id;
+// app.post('/signup:id', function(req, res) {
+//             var data = req.body;
+//             var id = req.params.id;
 
-    return id;
-    // let stdid = data["std_id"];
-    // let stdname = data["std_name"];
-    // let stdemail = data["std_email"];
-    // let stdpassword = dara["std_password"];
-    // let type = '1';
-    // if (!stdid) {
-    //     return res.status(400).send({ error: true, message: 'Please provide student id and student data' });
-    // }
-    // dbConn.query('INSERT INTO Users(student_id, user_name, user_email, user_pass, idUser_type) VALUES ?', data,
-    //     function(error, results, fields) {
-    //         if (error) throw error;
-    //         if (results[0]) {
-    //             return res.send(results[0]);
-    //         } else {
-    //             return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
-    //         }
-    //     });
+//             return id;
+// let stdid = data["std_id"];
+// let stdname = data["std_name"];
+// let stdemail = data["std_email"];
+// let stdpassword = dara["std_password"];
+// let type = '1';
+// if (!stdid) {
+//     return res.status(400).send({ error: true, message: 'Please provide student id and student data' });
+// }
+// dbConn.query('INSERT INTO Users(student_id, user_name, user_email, user_pass, idUser_type) VALUES ?', data,
+//     function(error, results, fields) {
+//         if (error) throw error;
+//         if (results[0]) {
+//             return res.send(results[0]);
+//         } else {
+//             return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
+//         }
+//     });
+// })
+
+
+app.post('/signup/student', function(req, res) {
+    var data = req.body
+    dbConn.query('INSERT INTO Users(student_id, user_name, user_email, user_pass, idUser_type) VALUES ?', data,
+        function(error, results, fields) {
+            if (results[0]) {
+                return res.send(results[0]);
+            } else {
+                return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
+            }
+        })
 })
 
 //set port
