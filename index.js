@@ -37,7 +37,7 @@ app.get("/login/:email", function(req, res) {
     if (!email) {
         return res.status(400).send({ error: true, message: 'Please provide email' });
     }
-    dbConn.query('SELECT * FROM Users WHERE user_email = ? and password = ?', [email, password],
+    dbConn.query('SELECT * FROM Users WHERE user_email = ? and user_pass = ?', [email, password],
         function(error, results, fields) {
             if (error) throw error;
             if (results[0]) {
