@@ -30,7 +30,7 @@ app.get("/allsubject", function(req, res) {
     });
 });
 
-app.get("/login/:email", function(req, res) {
+app.put("/login/:email", function(req, res) {
     let email = req.params.email;
     let data = req.body;
     let password = data["password"];
