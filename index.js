@@ -49,9 +49,11 @@ app.put("/login/:email", function(req, res) {
         });
 })
 
-app.post('/signup', function(req, res) {
+app.post('/signup:id', function(req, res) {
     var data = req.body;
-    return JSON.parse({ data: true })
+    var id = req.params.id;
+
+    return JSON.parse({ id: true })
         // let stdid = data["std_id"];
         // let stdname = data["std_name"];
         // let stdemail = data["std_email"];
