@@ -63,9 +63,12 @@ app.post('/signup/student', function(req, res) {
         "INSERT INTO Users(student_id, user_name, user_email, user_pass, idUser_type) VALUES ? ", [stdid, stdname, stdemail, stdpassword, type],
         function(error, results, fields) {
             if (error) throw error;
-            return res.send(results);
-        }
-    );
+            if (results[0]) {
+                return res.send(results[0]);
+            } else {
+                return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
+            }
+        });
     //return JSON.parse({ stdid: true })
 })
 
