@@ -11,10 +11,12 @@ app.use(
     })
 );
 
+// main
 app.get("/", function(req, res) {
     return res.send({ error: true, message: "Welcome to KARI Web API", By: "KARI IT CP KKU 14" });
 });
 
+// connect Database
 var dbConn = mysql.createConnection({
     host: "119.59.104.13",
     user: "supphita",
@@ -29,8 +31,10 @@ var dbConn = mysql.createConnection({
 //     database: "Kariscore",
 // })
 
+// คำสั่งเชื่อมต่อ
 dbConn.connect();
 
+// ดึงวิชา
 app.get("/allsubject", function(req, res) {
     dbConn.query("SELECT * FROM Subject", function(error, results, fields) {
         if (error) throw error;
@@ -38,6 +42,7 @@ app.get("/allsubject", function(req, res) {
     });
 });
 
+// Login
 app.put("/login/:email", function(req, res) {
     let email = req.params.email;
     let data = req.body;
@@ -56,30 +61,7 @@ app.put("/login/:email", function(req, res) {
         });
 })
 
-// app.post('/signup:id', function(req, res) {
-//             var data = req.body;
-//             var id = req.params.id;
-
-//             return id;
-// let stdid = data["std_id"];
-// let stdname = data["std_name"];
-// let stdemail = data["std_email"];
-// let stdpassword = dara["std_password"];
-// let type = '1';
-// if (!stdid) {
-//     return res.status(400).send({ error: true, message: 'Please provide student id and student data' });
-// }
-// dbConn.query('INSERT INTO Users(student_id, user_name, user_email, user_pass, idUser_type) VALUES ?', data,
-//     function(error, results, fields) {
-//         if (error) throw error;
-//         if (results[0]) {
-//             return res.send(results[0]);
-//         } else {
-//             return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
-//         }
-//     });
-// })
-
+// Sign up Student
 app.post("/signup/student", function(req, res) {
     var std = req.body;
     if (!std) {
@@ -97,18 +79,23 @@ app.post("/signup/student", function(req, res) {
     );
 });
 
+// Check student ID
+app.put("signup/student/check/:user_stdid", function(req, res) {
+    let stdid = req.params.user_stdid;
+    if (!stdid) {
+        return res.status(400).send({ error: true, message: "The transmission was not found." });
+    }
+    dbConn.query('SELECT * FROM Users WHERE user_email = ?', stdid,
+        function(error, results, fields) {
+            if (error) throw error;
+            if (results[0]) {
+                return res.send(results[0]);
+            } else {
+                return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
+            }
+        });
+});
 
-// app.post('/signup/student', function(req, res) {
-//     var data = req.body
-//     dbConn.query('INSERT INTO Users(student_id, user_name, user_email, user_pass, idUser_type) VALUES ?', data,
-//         function(error, results, fields) {
-//             if (results[0]) {
-//                 return res.send(results[0]);
-//             } else {
-//                 return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
-//             }
-//         })
-// })
 
 //set port
 app.listen(4000, function() {
