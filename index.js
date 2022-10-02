@@ -96,7 +96,6 @@ app.post("/signup/student", function(req, res) {
         }
     );
 });
-n
 
 
 // app.post('/signup/student', function(req, res) {
