@@ -96,7 +96,7 @@ app.post("/signup/student", function(req, res) {
 //         });
 // });
 
-app.put("signup/student/check/:stdid", function(req, res) {
+app.put("signup/student/:stdid", function(req, res) {
     let stdid = req.params.stdid;
     if (!stdid) {
         return res.status(400).send({ error: true, message: 'Please provide email' });
