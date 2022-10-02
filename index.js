@@ -80,8 +80,8 @@ app.post("/signup/student", function(req, res) {
 });
 
 // Check student ID
-app.get("signup/student/check/:user_stdid", function(req, res) {
-    var stdid = req.params.user_stdid;
+app.get("signup/student/check", function(req, res) {
+    var stdid = req.body;
     if (!stdid) {
         return res.status(400).send({ error: true, message: "The transmission was not found." });
     }
