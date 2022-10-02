@@ -85,7 +85,7 @@ app.put("signup/student/check/:user_stdid", function(req, res) {
     if (!stdid) {
         return res.status(400).send({ error: true, message: "The transmission was not found." });
     }
-    dbConn.query('SELECT * FROM Users WHERE user_email = ?', stdid,
+    dbConn.query('SELECT * FROM Users WHERE user_stdid = ?', stdid,
         function(error, results, fields) {
             if (error) throw error;
             if (results[0]) {
