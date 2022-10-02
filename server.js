@@ -64,6 +64,7 @@ app.post("/auth/login", function(req, res) {
 // Sign up Student
 app.post("/auth/signup/student", function(req, res) {
     var std = req.body;
+    console.log(std)
     if (!std) {
         return res
             .status(400)
@@ -93,6 +94,43 @@ app.post("auth/signup/student/check", function(req, res) {
                 return res.send(results[0]);
             } else {
                 return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
+            }
+        });
+})
+
+// Sign up Teacher
+app.post("/auth/signup/teacher", function(req, res) {
+    var teace = req.body;
+    console.log(teace)
+    if (!teace) {
+        return res
+            .status(400)
+            .send({ error: true, message: "The transmission was not found." });
+    }
+    dbConn.query(
+        "INSERT INTO Users SET ? ",
+        teace,
+        function(error, results, fields) {
+            if (error) throw error;
+            return res.send(results);
+        }
+    );
+});
+
+// Check Email Teacher
+app.post("/auth/signup/teacher/check", function(req, res) {
+    let teacemail = req.body;
+    console.log(teacemail)
+    if (!teacemail) {
+        return res.status(400).send({ error: true, message: 'The transmission was not found.' });
+    }
+    dbConn.query('SELECT * FROM Users WHERE ?', teacemail,
+        function(error, results, fields) {
+            if (error) throw error;
+            if (results[0]) {
+                return res.send(results[0]);
+            } else {
+                return res.status(400).send({ error: true, message: 'Teacher email Not Found!!' });
             }
         });
 })
