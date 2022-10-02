@@ -80,26 +80,11 @@ app.post("/signup/student", function(req, res) {
 });
 
 // Check student ID
-// app.put("signup/student/check", function(req, res) {
-//     var stdid = req.body;
-//     if (!stdid) {
-//         return res.status(400).send({ error: true, message: "The transmission was not found." });
-//     }
-//     dbConn.query('SELECT * FROM Users WHERE user_stdid = ?', stdid,
-//         function(error, results, fields) {
-//             if (error) throw error;
-//             if (results[0]) {
-//                 return res.send(results[0]);
-//             } else {
-//                 return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
-//             }
-//         });
-// });
-
-app.put("signup/student/:stdid", function(req, res) {
-    let stdid = req.params.stdid;
+app.put("/signup/student/check/:user_stdid", function(req, res) {
+    let stdid = req.params.user_stdid;
+    console.log(stdid)
     if (!stdid) {
-        return res.status(400).send({ error: true, message: 'Please provide email' });
+        return res.status(400).send({ error: true, message: 'The transmission was not found.' });
     }
     dbConn.query('SELECT * FROM Users WHERE user_stdid = ?', stdid,
         function(error, results, fields) {
