@@ -43,26 +43,26 @@ app.get("/allsubject", function(req, res) {
 });
 
 // Login
-app.put("/login/:email", function(req, res) {
-    let email = req.params.email;
+app.post("/auth/login", function(req, res) {
     let data = req.body;
-    let password = data["password"];
-    if (!email) {
-        return res.status(400).send({ error: true, message: 'Please provide email' });
+    let email = data['user_email'];
+    let password = data['user_pass'];
+    console.log(email, password)
+    if (!data) {
+        return res.status(400).send({ error: true, message: 'Please provide กฟะฟ' });
     }
-    dbConn.query('SELECT * FROM Users WHERE user_email = ? and user_pass = ?', [email, password],
-        function(error, results, fields) {
-            if (error) throw error;
-            if (results[0]) {
-                return res.send(results[0]);
-            } else {
-                return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
-            }
-        });
+    dbConn.query('SELECT * FROM Users WHERE user_email = ? AND user_pass = ?', [email, password], function(error, results, fields) {
+        if (error) throw error;
+        if (results[0]) {
+            return res.send(results[0]);
+        } else {
+            return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
+        }
+    });
 })
 
 // Sign up Student
-app.post("/signup/student", function(req, res) {
+app.post("/auth/signup/student", function(req, res) {
     var std = req.body;
     if (!std) {
         return res
@@ -80,13 +80,13 @@ app.post("/signup/student", function(req, res) {
 });
 
 // Check student ID
-app.put("/signup/student/check/:user_stdid", function(req, res) {
-    let stdid = req.params.user_stdid;
+app.post("auth/signup/student/check", function(req, res) {
+    let stdid = req.body;
     console.log(stdid)
     if (!stdid) {
         return res.status(400).send({ error: true, message: 'The transmission was not found.' });
     }
-    dbConn.query('SELECT * FROM Users WHERE user_stdid = ?', stdid,
+    dbConn.query('SELECT * FROM Users WHERE ?', stdid,
         function(error, results, fields) {
             if (error) throw error;
             if (results[0]) {
