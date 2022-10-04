@@ -137,19 +137,19 @@ app.post("/auth/signup/teacher/check", function(req, res) {
 
 
 // เพิ่มเติม
-app.get('/std/:id', function (req, res) {
+app.get('/std/:id', function(req, res) {
     let user_stdid = req.params.id;
     if (!user_stdid) {
         return res.status(400).send({ error: true, message: 'Please provide student id' });
     }
-    dbConn.query('SELECT * FROM Users WHERE user_stdid = ?', user_stdid, function (error, results, fields) {
+    dbConn.query('SELECT * FROM Users WHERE user_stdid = ?', user_stdid, function(error, results, fields) {
         if (error) throw error;
         if (results[0]) {
             return res.send(results[0]);
         } else {
             return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
         }
-    });          
+    });
 })
 
 app.get("/allStudentScore/:id", function(req, res) {
@@ -159,34 +159,52 @@ app.get("/allStudentScore/:id", function(req, res) {
     });
 });
 
-app.put('/subject/:id',function(req,res){
+app.put('/subject/:id', function(req, res) {
     let subject_id = req.params.id;
     let sj = req.body
-    if(!subject_id || !sj){
-        return res.status(400).send({ error: true, message: 'Please provide Subject id and Subject data' }); 
+    if (!subject_id || !sj) {
+        return res.status(400).send({ error: true, message: 'Please provide Subject id and Subject data' });
     }
 
     dbConn.query('UPDATE Subjects SET ? WHERE subject_id = ?', [sj, subject_id], function(error, results, fields) {
         if (error) throw error;
-        
+
         return res.send({ error: false, message: 'Subject has been updated seccessfully' });
-       
-    });    
+
+    });
 })
 
 
-app.delete('/subject/:id', function(req,res){
+app.delete('/subject/:id', function(req, res) {
     let subject_id = req.params.id;
     if (!subject_id) {
         return res.status(400).send({ error: true, message: 'Please provide Subject id' });
     }
     dbConn.query('DELETE FROM Subjects WHERE subject_id = ?', subject_id, function(error, results, fields) {
         if (error) throw error;
-        
+
         return res.send({ error: false, message: 'Subject has been deleted seccessfully' });
-       
-    });    
+
+    });
 })
+
+app.post("/insertSubject", function(req, res) {
+    var subject = req.body;
+    console.log(subject)
+    if (!subject) {
+        return res
+            .status(400)
+            .send({ error: true, message: "The transmission was not found." });
+    }
+    dbConn.query(
+        "INSERT INTO Subjects SET ? ",
+        subject,
+        function(error, results, fields) {
+            if (error) throw error;
+            return res.send(results);
+        }
+    );
+});
 
 
 //set port
