@@ -206,6 +206,24 @@ app.post("/insertSubject", function(req, res) {
     );
 });
 
+app.post("/insertOwner", function(req, res) {
+    var subject = req.body;
+    console.log(subject)
+    if (!subject) {
+        return res
+            .status(400)
+            .send({ error: true, message: "The transmission was not found." });
+    }
+    dbConn.query(
+        "INSERT INTO Classroom SET ? ",
+        subject,
+        function(error, results, fields) {
+            if (error) throw error;
+            return res.send(results);
+        }
+    );
+});
+
 
 //set port
 app.listen(4000, function() {
