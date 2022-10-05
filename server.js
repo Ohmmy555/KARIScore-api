@@ -207,16 +207,16 @@ app.post("/insertSubject", function(req, res) {
 });
 
 app.post("/insertOwner", function(req, res) {
-    var subject = req.body;
-    console.log(subject)
-    if (!subject) {
+    var owner = req.body;
+    console.log(owner)
+    if (!owner) {
         return res
             .status(400)
             .send({ error: true, message: "The transmission was not found." });
     }
     dbConn.query(
         "INSERT INTO Classroom SET ? ",
-        subject,
+        owner,
         function(error, results, fields) {
             if (error) throw error;
             return res.send(results);
@@ -224,6 +224,23 @@ app.post("/insertOwner", function(req, res) {
     );
 });
 
+app.post("/createWork", function(req, res) {
+    var work = req.body;
+    console.log(work)
+    if (!work) {
+        return res
+            .status(400)
+            .send({ error: true, message: "The transmission was not found." });
+    }
+    dbConn.query(
+        "INSERT INTO Score SET ? ",
+        work,
+        function(error, results, fields) {
+            if (error) throw error;
+            return res.send(results);
+        }
+    );
+});
 
 //set port
 app.listen(4000, function() {
