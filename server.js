@@ -36,7 +36,7 @@ dbConn.connect();
 
 // ดึงวิชา
 app.get("/allsubject", function(req, res) {
-    dbConn.query("SELECT * FROM Subject", function(error, results, fields) {
+    dbConn.query("SELECT * FROM Subjects", function(error, results, fields) {
         if (error) throw error;
         return res.send(results);
     });
