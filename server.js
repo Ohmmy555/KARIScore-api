@@ -39,7 +39,7 @@ app.post("/allsubject", function(req, res) {
     let data = req.body;
     let user_id = data['user_id']
     console.log(user_id);
-    dbConn.query("SELECT Subjects.subject_name,Subjects.subject_description FROM Classroom,Subjects WHERE Classroom.subject_id=Subjects.subject_id AND Classroom.user_id = ? GROUP BY Subjects.subject_name", user_id, function(error, results, fields) {
+    dbConn.query("SELECT Subjects.subject_name,Subjects.subject_description,Subjects.subject_year,Subjects.subject_term FROM Classroom,Subjects WHERE Classroom.subject_id=Subjects.subject_id AND Classroom.user_id = ? GROUP BY Subjects.subject_name", user_id, function(error, results, fields) {
         if (error) throw error;
         return res.send(results);
     });
