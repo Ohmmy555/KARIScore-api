@@ -153,8 +153,8 @@ app.get('/std/:id', function(req, res) {
 })
 
 app.get("/allStudentScore", function(req, res) {
-    dbConn.query("SELECT Users.user_stdid,Users.user_name,Score_Student.score FROM Score_Student,Users,Score " + 
-    "WHERE 1 AND Users.user_id=Score_Student.user_id GROUP BY Users.user_stdid,Users.user_name", function(error, results, fields) {
+    dbConn.query("SELECT Users.user_stdid,Users.user_name,Score_Student.score FROM Score_Student,Users,Score "+
+    "WHERE Score_Student.score_id='1' AND Score_Student.score_id=Score.score_id AND Users.user_id=Score_Student.user_id GROUP BY Users.user_id  ", function(error, results, fields) {
         if (error) throw error;
         return res.send(results);
     });
