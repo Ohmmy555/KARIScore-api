@@ -152,8 +152,9 @@ app.get('/std/:id', function(req, res) {
     });
 })
 
-app.get("/allStudentScore/:id", function(req, res) {
-    dbConn.query("SELECT Score_Student.score as score , Users.user_stdid as stdid, Users.user_name as name FROM Score_Student , Users WHERE Score_Student.score_id = 1", function(error, results, fields) {
+app.get("/allStudentScore", function(req, res) {
+    dbConn.query("SELECT Users.user_stdid,Users.user_name,Score_Student.score FROM Score_Student,Users,Score " + 
+    "WHERE 1 AND Users.user_id=Score_Student.user_id GROUP BY Users.user_stdid,Users.user_name", function(error, results, fields) {
         if (error) throw error;
         return res.send(results);
     });
