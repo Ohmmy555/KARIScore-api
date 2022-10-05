@@ -247,7 +247,7 @@ app.post("/createWork", function(req, res) {
 });
 
 app.get("/subjectWork", function(req, res) {
-    dbConn.query("SELECT score_id,score_name,score_date,full_score FROM Score WHERE subject_id = 1", function(error, results, fields) {
+    dbConn.query("SELECT score_id,score_name,score_date FROM Score WHERE subject_id = 1", function(error, results, fields) {
         if (error) throw error;
         return res.send(results);
     });
