@@ -35,8 +35,11 @@ var dbConn = mysql.createConnection({
 dbConn.connect();
 
 // ดึงวิชา
-app.get("/allsubject", function(req, res) {
-    dbConn.query("SELECT * FROM Subjects", function(error, results, fields) {
+app.post("/allsubject", function(req, res) {
+    let data = req.body;
+    let user_id = data['user_id']
+    console.log(user_id);
+    dbConn.query("SELECT Subjects.subject_name,Subjects.subject_description FROM Classroom,Subjects WHERE Classroom.subject_id=Subjects.subject_id AND Classroom.user_id = ? GROUP BY Subjects.subject_name", user_id, function(error, results, fields) {
         if (error) throw error;
         return res.send(results);
     });
@@ -153,11 +156,20 @@ app.get('/std/:id', function(req, res) {
 })
 
 app.get("/allStudentScore", function(req, res) {
+<<<<<<< HEAD
     dbConn.query("SELECT Users.user_stdid,Users.user_name,Score_Student.score FROM Score_Student,Users,Score "+
     "WHERE Score_Student.score_id='1' AND Score_Student.score_id=Score.score_id AND Users.user_id=Score_Student.user_id GROUP BY Users.user_id  ", function(error, results, fields) {
         if (error) throw error;
         return res.send(results);
     });
+=======
+    dbConn.query("SELECT Users.user_stdid,Users.user_name,Score_Student.score FROM Score_Student,Users,Score " +
+        "WHERE 1 AND Users.user_id=Score_Student.user_id GROUP BY Users.user_stdid,Users.user_name",
+        function(error, results, fields) {
+            if (error) throw error;
+            return res.send(results);
+        });
+>>>>>>> 83317ade3989c3ac803048f69b5b8fa4beacbd06
 });
 
 app.put('/subject/:id', function(req, res) {
