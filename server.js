@@ -265,8 +265,9 @@ app.post("/createWork", function(req, res) {
     );
 });
 
-app.get("/subjectWork", function(req, res) {
-    dbConn.query("SELECT score_id,score_name,score_date FROM Score WHERE subject_id = 1", function(error, results, fields) {
+app.post("/subjectWork", function(req, res) {
+    let data = req.body;
+    dbConn.query("SELECT score_id,score_name,score_date FROM Score WHERE subject_id = ?", data, function(error, results, fields) {
         if (error) throw error;
         return res.send(results);
     });
