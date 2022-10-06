@@ -210,6 +210,24 @@ app.post("/insertSubject", function(req, res) {
     );
 });
 
+app.post("/insertScoreStudent", function(req, res) {
+    var scoreStudent = req.body;
+    console.log(scoreStudent)
+    if (!scoreStudent) {
+        return res
+            .status(400)
+            .send({ error: true, message: "The transmission was not found." });
+    }
+    dbConn.query(
+        "INSERT INTO Score_Student SET ? ",
+        scoreStudent,
+        function(error, results, fields) {
+            if (error) throw error;
+            return res.send(results);
+        }
+    );
+});
+
 app.post("/insertOwner", function(req, res) {
     var owner = req.body;
     console.log(owner)
