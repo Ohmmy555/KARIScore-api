@@ -39,7 +39,7 @@ app.post("/allsubject", function(req, res) {
     let data = req.body;
     let user_id = data['user_id']
     console.log(user_id);
-    dbConn.query("SELECT Subjects.subject_name,Subjects.subject_description,Subjects.subject_year,Subjects.subject_term FROM Classroom,Subjects WHERE Classroom.subject_id=Subjects.subject_id AND Classroom.user_id = ? GROUP BY Subjects.subject_name", user_id, function(error, results, fields) {
+    dbConn.query("SELECT Subjects.subject_name,Subjects.subject_description,Subjects.subject_year,Subjects.subject_term,Subjects.subject_id FROM Classroom,Subjects WHERE Classroom.subject_id=Subjects.subject_id AND Classroom.user_id = ? GROUP BY Subjects.subject_name", user_id, function(error, results, fields) {
         if (error) throw error;
         return res.send(results);
     });
@@ -156,11 +156,12 @@ app.get('/std/:id', function(req, res) {
 })
 
 app.get("/allStudentScore", function(req, res) {
-    dbConn.query("SELECT Users.user_stdid,Users.user_name,Score_Student.score FROM Score_Student,Users,Score "+
-    "WHERE Score_Student.score_id='1' AND Score_Student.score_id=Score.score_id AND Users.user_id=Score_Student.user_id GROUP BY Users.user_id  ", function(error, results, fields) {
-        if (error) throw error;
-        return res.send(results);
-    });
+    dbConn.query("SELECT Users.user_stdid,Users.user_name,Score_Student.score FROM Score_Student,Users,Score " +
+        "WHERE Score_Student.score_id='1' AND Score_Student.score_id=Score.score_id AND Users.user_id=Score_Student.user_id GROUP BY Users.user_id  ",
+        function(error, results, fields) {
+            if (error) throw error;
+            return res.send(results);
+        });
 });
 
 app.put('/subject/:id', function(req, res) {
