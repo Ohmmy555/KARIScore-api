@@ -158,7 +158,8 @@ app.get('/std/:id', function(req, res) {
 app.post("/allStudentScore", function(req, res) {
     let data = req.body;
     let scoreid = data['score_id']
-    dbConn.query("SELECT Score_Student.user_id,Users.user_name,Score_Student.score FROM Score_Student,Users WHERE Score_Student.user_id=Users.user_id AND Score_Student.score_id=?", scoreid,
+    console.log(scoreid);
+    dbConn.query("SELECT Users.user_stdid,Users.user_name,Score_Student.score FROM Score_Student,Users WHERE Score_Student.user_id=Users.user_id AND Score_Student.score_id=?", scoreid,
         function(error, results, fields) {
             if (error) throw error;
             return res.send(results);
