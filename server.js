@@ -34,17 +34,8 @@ var dbConn = mysql.createConnection({
 // คำสั่งเชื่อมต่อ
 dbConn.connect();
 
-// ดึงวิชา
-app.post("/allsubject", function(req, res) {
-    let data = req.body;
-    let user_id = data['user_id']
-    console.log(user_id);
-    dbConn.query("SELECT Subjects.subject_name,Subjects.subject_description,Subjects.subject_year,Subjects.subject_term,Subjects.subject_id,Subjects.subject_code FROM Classroom,Subjects WHERE Classroom.subject_id=Subjects.subject_id AND Classroom.user_id = ? GROUP BY Subjects.subject_name", user_id, function(error, results, fields) {
-        if (error) throw error;
-        return res.send(results);
-    });
-});
 
+//Auth
 // Login
 app.post("/auth/login", function(req, res) {
     let data = req.body;
@@ -138,14 +129,94 @@ app.post("/auth/signup/teacher/check", function(req, res) {
         });
 })
 
+// Subject
+// Call Subject
+app.post("/allsubject", function(req, res) {
+    let data = req.body;
+    let user_id = data['user_id']
+    console.log(user_id);
+    dbConn.query("SELECT Subjects.subject_name,Subjects.subject_description,Subjects.subject_year,Subjects.subject_term,Subjects.subject_id,Subjects.subject_code FROM Classroom,Subjects WHERE Classroom.subject_id=Subjects.subject_id AND Classroom.user_id = ? AND deleted_at = '0000-00-00 00:00:00.000000' GROUP BY Subjects.subject_name", user_id, function(error, results, fields) {
+        if (error) throw error;
+        return res.send(results);
+    });
+});
 
-// เพิ่มเติม
-app.get('/std/:id', function(req, res) {
-    let user_stdid = req.params.id;
+// Join Subject : check code
+app.post("/subject/join", function(req, res) {
+    let data = req.body;
+    dbConn.query("SELECT * FROM Subjects WHERE ?", data, function(error, results, fields) {
+        if (error) throw error;
+        if (results[0]) {
+            return res.send(results[0]);
+        } else {
+            return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
+        }
+    });
+})
+
+// Join Subject : check student
+app.post("/subject/join/check", function(req, res) {
+    let data = req.body;
+    let subject_id = data['subject_id'];
+    let user_id = data['user_id'];
+    dbConn.query('SELECT * FROM Classroom WHERE subject_id = ? AND user_id = ?', [subject_id, user_id], function(error, results, fields) {
+        if (error) throw error;
+        if (results[0]) {
+            return res.send(results[0])
+        } else {
+            return res.status(400).send({ error: true, message: 'Student id Not Found!!' })
+        }
+    })
+})
+
+// Join Subject : insert student
+app.post("/subject/join/update", function(req, res) {
+    let data = req.body;
+    console.log(data)
+    dbConn.query("INSERT INTO Classroom SET ?", data, function(error, results, fields) {
+        if (error) throw error;
+        return res.send(results)
+    })
+})
+
+// Join Subject : Check subject id
+app.post("/insertSubject/call", function(req, res) {
+    let data = req.body;
+    console.log(data);
+    dbConn.query("SELECT * FROM Subjects WHERE ?", data, function(error, results, fields) {
+        if (error) throw error;
+        if (results[0]) {
+            return res.send(results[0]);
+        } else {
+            return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
+        }
+    });
+})
+
+// Score
+// Search Student for score
+app.post('/score/search', function(req, res) {
+    let data = req.body;
+    let user_stdid = "%" + data['user_stdid'];
+    let subject_id = data['subject_id'];
+    console.log(subject_id);
     if (!user_stdid) {
         return res.status(400).send({ error: true, message: 'Please provide student id' });
     }
-    dbConn.query('SELECT * FROM Users WHERE user_stdid = ?', user_stdid, function(error, results, fields) {
+    dbConn.query('SELECT Users.user_stdid,Users.user_name FROM Users,Classroom WHERE Classroom.user_id=Users.user_id AND Users.user_stdid LIKE ? AND Classroom.subject_id = ?', [user_stdid, subject_id], function(error, results, fields) {
+        if (error) throw error;
+        if (results[0]) {
+            return res.send(results[0]);
+        } else {
+            return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
+        }
+    });
+})
+
+// Score : call subject
+app.post("/score/subject", function(req, res) {
+    let data = req.body;
+    dbConn.query("SELECT * FROM Subjects WHERE ?", data, function(error, results, fields) {
         if (error) throw error;
         if (results[0]) {
             return res.send(results[0]);
@@ -166,33 +237,41 @@ app.post("/allStudentScore", function(req, res) {
         });
 });
 
-app.put('/subject/:id', function(req, res) {
-    let subject_id = req.params.id;
-    let sj = req.body
-    if (!subject_id || !sj) {
-        return res.status(400).send({ error: true, message: 'Please provide Subject id and Subject data' });
+//Edit subject
+app.post('/subject/edit', function(req, res) {
+    let data = req.body;
+    let subject_id = data['subject_id'];
+    let subject_name = data['subject_name'];
+    let subject_year = data['subject_year'];
+    let subject_tear = data['subject_term'];
+    let subject_description = data['subject_description']
+    if (!data) {
+        return res.status(400).send({ error: true, message: 'Please provide Subject data' });
     }
 
-    dbConn.query('UPDATE Subjects SET ? WHERE subject_id = ?', [sj, subject_id], function(error, results, fields) {
+    dbConn.query('UPDATE Subjects SET subject_name = ?,subject_year = ?,subject_term = ?,subject_description = ? WHERE subject_id = ?', [subject_name, subject_year, subject_tear, subject_description, subject_id], function(error, results, fields) {
         if (error) throw error;
-
-        return res.send({ error: false, message: 'Subject has been updated seccessfully' });
+        return res.send(results)
 
     });
 })
 
 
-app.delete('/subject/:id', function(req, res) {
-    let subject_id = req.params.id;
+// Delete subject
+app.post('/subject/delete', function(req, res) {
+    let data = req.body;
+    let subject_id = data['subject_id']
+    let date = new Date();
+    console.log(subject_id);
+    console.log(date.toISOString())
     if (!subject_id) {
         return res.status(400).send({ error: true, message: 'Please provide Subject id' });
     }
-    dbConn.query('DELETE FROM Subjects WHERE subject_id = ?', subject_id, function(error, results, fields) {
+    dbConn.query("UPDATE Subjects SET deleted_at = ? WHERE subject_id = ?", [date, subject_id], function(error, results, fields) {
         if (error) throw error;
+        return res.send(results)
+    })
 
-        return res.send({ error: false, message: 'Subject has been deleted seccessfully' });
-
-    });
 })
 
 app.post("/insertSubject", function(req, res) {
@@ -275,6 +354,88 @@ app.post("/subjectWork", function(req, res) {
         return res.send(results);
     });
 });
+
+// Call Teacher in subject
+app.post("/subject/people/teacher", function(req, res) {
+    let data = req.body;
+    let subject_id = data['subject_id'];
+    console.log("ดึงอาจารย์ : " + subject_id);
+    dbConn.query("SELECT Users.user_id,Users.user_name,Users.user_stdid FROM Classroom,Users WHERE Classroom.user_id=Users.user_id AND Classroom.subject_id = ? AND Classroom.user_type_id = 1", subject_id, function(error, results, fields) {
+        if (error) throw error;
+        if (results) {
+            return res.send(results)
+        } else {
+            return res
+                .status(400)
+                .send({
+                    error: true,
+                    message: "The transmission was not found."
+                })
+        }
+    })
+})
+
+// Call Student in subject
+app.post("/subject/people/student", function(req, res) {
+    let data = req.body;
+    let subject_id = data['subject_id'];
+    console.log("ดึงนักศึกษา : " + subject_id);
+    dbConn.query("SELECT Users.user_id,Users.user_name,Users.user_stdid FROM Classroom,Users WHERE Classroom.user_id=Users.user_id AND Classroom.subject_id = ? AND Classroom.user_type_id = 2", subject_id, function(error, results, fields) {
+        if (error) throw error;
+        if (results) {
+            return res.send(results)
+        } else {
+            return res
+                .status(400)
+                .send({
+                    error: true,
+                    message: "The transmission was not found."
+                })
+        }
+    })
+})
+
+// Delete people in subject
+app.post("/subject/people/delete", function(req, res) {
+    let data = req.body;
+    let subject_id = data['subject_id'];
+    let user_id = data['user_id'];
+    console.log(data)
+    dbConn.query("DELETE FROM Classroom WHERE subject_id = ? AND user_id = ?", [subject_id, user_id], function(error, results, fields) {
+        if (error) throw error;
+        if (results) {
+            return res.send(results)
+        } else {
+            return res
+                .status(400)
+                .send({
+                    error: true,
+                    message: "The transmission was not found."
+                })
+        }
+    })
+})
+
+// Add people in subject
+app.post("/subject/people/add/check", function(req, res) {
+    let data = req.body;
+    console.log(data)
+    dbConn.query("SELECT * FROM Users WHERE ?", data, function(error, results, fields) {
+        console.log(results)
+        if (error) throw error;
+        if (results[0]) {
+            return res.send(results[0])
+        } else {
+            res
+                .status(400)
+                .send({
+                    error: true,
+                    message: "The transmission was not found."
+                })
+        }
+    })
+})
+
 
 //set port
 app.listen(4000, function() {
