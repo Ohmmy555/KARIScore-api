@@ -452,6 +452,19 @@ app.post('/subject/score', function(req, res) {
     })
 })
 
+// Call data users
+app.post("/call/student", function(req, res) {
+    let data = req.body;
+    dbConn.query('SELECT * FROM Users WHERE ?', data, function(error, results, fields) {
+        if (error) throw error;
+        if (results) {
+            return res.send(results)
+        } else {
+            return res.status(400).send({ error: true, message: "The transmission was not found." })
+        }
+    })
+})
+
 
 
 //set port
