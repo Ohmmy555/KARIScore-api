@@ -135,7 +135,7 @@ app.post("/allsubject", function(req, res) {
     let data = req.body;
     let user_id = data['user_id']
     console.log(user_id);
-    dbConn.query("SELECT Subjects.subject_name,Subjects.subject_description,Subjects.subject_year,Subjects.subject_term,Subjects.subject_id,Subjects.subject_code FROM Classroom,Subjects WHERE Classroom.subject_id=Subjects.subject_id AND Classroom.user_id = ? AND deleted_at = '0000-00-00 00:00:00.000000' GROUP BY Subjects.subject_name", user_id, function(error, results, fields) {
+    dbConn.query("SELECT Subjects.subject_name,Subjects.subject_description,Subjects.subject_year,Subjects.subject_term,Subjects.subject_id,Subjects.subject_code,Classroom.user_type_id FROM Classroom,Subjects WHERE Classroom.subject_id=Subjects.subject_id AND Classroom.user_id = ? AND deleted_at = '0000-00-00 00:00:00.000000' GROUP BY Subjects.subject_name", user_id, function(error, results, fields) {
         if (error) throw error;
         return res.send(results);
     });
@@ -435,6 +435,22 @@ app.post("/subject/people/add/check", function(req, res) {
         }
     })
 })
+
+// check type
+app.post('/subject/score', function(req, res) {
+    let data = req.body;
+    let subject_id = data['subject_id'];
+    let user_id = data['user_id'];
+    dbConn.query('SELECT Score.score_name,Score.create_at,Score_Student.score,Score.subject_id FROM Score,Score_Student WHERE Score.score_id=Score_Student.score_id AND Score.subject_id = ? AND Score_Student.user_id = ?', [subject_id, user_id], function(error, results, fields) {
+        if (error) throw error;
+        if (results[0]) {
+            return res.send(results[0])
+        } else {
+            return res.status(400).send({ error: true, message: "The transmission was not found." })
+        }
+    })
+})
+
 
 
 //set port
