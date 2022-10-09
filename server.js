@@ -458,7 +458,8 @@ app.post("/call/student", function(req, res) {
     dbConn.query('SELECT * FROM Users WHERE ?', data, function(error, results, fields) {
         if (error) throw error;
         if (results) {
-            return res.send(results)
+            console.log(results)
+            return res.send(results[0])
         } else {
             return res.status(400).send({ error: true, message: "The transmission was not found." })
         }
