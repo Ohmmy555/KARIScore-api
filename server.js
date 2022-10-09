@@ -441,7 +441,7 @@ app.post('/subject/score', function(req, res) {
     let data = req.body;
     let subject_id = data['subject_id'];
     let user_id = data['user_id'];
-    dbConn.query('SELECT Score.score_name,Score.create_at,Score_Student.score,Score.subject_id FROM Score,Score_Student WHERE Score.score_id=Score_Student.score_id AND Score.subject_id = ? AND Score_Student.user_id = ?', [subject_id, user_id], function(error, results, fields) {
+    dbConn.query('SELECT Score.score_id,Score.score_name,Score.create_at,Score_Student.score FROM Score,Score_Student WHERE Score.score_id=Score_Student.score_id AND Score.subject_id = ? AND Score_Student.user_id = ?', [subject_id, user_id], function(error, results, fields) {
         if (error) throw error;
         if (results[0]) {
             return res.send(results[0])
