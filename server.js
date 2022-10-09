@@ -466,6 +466,21 @@ app.post("/call/student", function(req, res) {
     })
 })
 
+// Save profile name
+app.post('/profile/save', function(req, res) {
+    let data = req.body;
+    let user_name = data['user_name'];
+    let user_id = data['user_id'];
+    dbConn.query("UPDATE Users SET user_name = ? WHERE user_id = ?", [user_name, user_id], function(error, results, fields) {
+        if (error) throw error;
+        if (results) {
+            return res.send(results);
+        } else {
+            return res.status(400).send({ error: true, message: "The transmission was not found." })
+        }
+    })
+})
+
 
 
 //set port
