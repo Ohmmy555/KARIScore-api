@@ -203,7 +203,7 @@ app.post('/score/search', function(req, res) {
     if (!user_stdid) {
         return res.status(400).send({ error: true, message: 'Please provide student id' });
     }
-    dbConn.query('SELECT Users.user_stdid,Users.user_name FROM Users,Classroom WHERE Classroom.user_id=Users.user_id AND Users.user_stdid LIKE ? AND Classroom.subject_id = ?', [user_stdid, subject_id], function(error, results, fields) {
+    dbConn.query('SELECT Users.user_stdid,Users.user_name,Users.user_id FROM Users,Classroom WHERE Classroom.user_id=Users.user_id AND Users.user_stdid LIKE ? AND Classroom.subject_id = ? AND user_type_id = 3', [user_stdid, subject_id], function(error, results, fields) {
         if (error) throw error;
         if (results[0]) {
             return res.send(results[0]);
