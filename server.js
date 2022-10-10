@@ -525,7 +525,7 @@ app.post('/profile/password/check', function(req, res) {
 app.post('/profile/password/update', function(req, res) {
     let data = req.body;
     let user_id = data['user_id'];
-    let password = data['user_pass'];
+    let password = data['new_pass'];
     console.log(user_id, password)
     if (!data) {
         return res.status(400).send({ error: true, message: 'Please provide กฟะฟ' });
