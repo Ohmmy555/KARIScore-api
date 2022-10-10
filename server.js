@@ -528,7 +528,7 @@ app.post('/profile/password/update', function(req, res) {
     let password = data['new_pass'];
     console.log(user_id, password)
     if (!data) {
-        return res.status(400).send({ error: true, message: 'Please provide กฟะฟ' });
+        return res.status(400).send({ error: true, message: 'Please provide data' });
     }
     dbConn.query('UPDATE Users SET user_pass = ? WHERE user_id = ?', [password, user_id], function(error, results, fields) {
         if (error) throw error;
