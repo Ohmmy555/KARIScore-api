@@ -274,17 +274,34 @@ app.post('/subject/delete', function(req, res) {
 
 })
 
+function generateString(length) {
+    characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    result = '';
+    //นับจำนวนตัวอักษร
+    charactersLength = characters.length;
+    //วนลูปตามจำนวนตัวอักษร
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+
+    return result;
+}
+
 app.post("/insertSubject", function(req, res) {
-    var subject = req.body;
-    console.log(subject)
-    if (!subject) {
+    var data = req.body;
+    var subject_name = data['subject_name']
+    var subject_year = data['subject_year']
+    var subject_term = data['subject_term']
+    var subject_description = data['subject_description']
+    var code = generateString(4);
+    console.log(code)
+    if (!data) {
         return res
             .status(400)
             .send({ error: true, message: "The transmission was not found." });
     }
     dbConn.query(
-        "INSERT INTO Subjects SET ? ",
-        subject,
+        "INSERT INTO Subjects SET subject_name = ?, subject_year = ?, subject_term = ?, subject_description = ?, subject_code = ?", [subject_name, subject_year, subject_term, subject_description, code],
         function(error, results, fields) {
             if (error) throw error;
             return res.send(results);
@@ -480,6 +497,41 @@ app.post('/profile/save', function(req, res) {
         }
     })
 })
+
+// check password
+app.post('/profile/password/check', function(req, res) {
+    let data = req.body;
+    let user_id = data['user_id'];
+    let password = data['user_pass'];
+    console.log(user_id, password)
+    if (!data) {
+        return res.status(400).send({ error: true, message: 'Please provide กฟะฟ' });
+    }
+    dbConn.query('SELECT * FROM Users WHERE user_id = ? AND user_pass = ?', [user_id, password], function(error, results, fields) {
+        if (error) throw error;
+        if (results[0]) {
+            return res.send(results[0]);
+        } else {
+            return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
+        }
+    });
+})
+
+// update password
+app.post('/profile/password/update', function(req, res) {
+    let data = req.body;
+    let user_id = data['user_id'];
+    let password = data['user_pass'];
+    console.log(user_id, password)
+    if (!data) {
+        return res.status(400).send({ error: true, message: 'Please provide กฟะฟ' });
+    }
+    dbConn.query('UPDATE Users SET user_pass = ? WHERE user_id = ?', [password, user_id], function(error, results, fields) {
+        if (error) throw error;
+        return res.send(results)
+    })
+})
+
 
 
 
