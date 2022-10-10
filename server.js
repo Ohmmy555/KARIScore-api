@@ -381,7 +381,7 @@ app.post("/subject/people/teacher", function(req, res) {
     let data = req.body;
     let subject_id = data['subject_id'];
     console.log("ดึงอาจารย์ : " + subject_id);
-    dbConn.query("SELECT Users.user_id,Users.user_name,Users.user_stdid FROM Classroom,Users WHERE Classroom.user_id=Users.user_id AND Classroom.subject_id = ? AND Classroom.user_type_id = 1", subject_id, function(error, results, fields) {
+    dbConn.query("SELECT Users.user_id,Users.user_name,Users.user_stdid FROM Classroom,Users WHERE Classroom.user_id=Users.user_id AND Classroom.subject_id = ? AND Classroom.user_type_id = 1 AND Classroom.user_type_id = 2", subject_id, function(error, results, fields) {
         if (error) throw error;
         if (results) {
             return res.send(results)
@@ -401,7 +401,7 @@ app.post("/subject/people/student", function(req, res) {
     let data = req.body;
     let subject_id = data['subject_id'];
     console.log("ดึงนักศึกษา : " + subject_id);
-    dbConn.query("SELECT Users.user_id,Users.user_name,Users.user_stdid FROM Classroom,Users WHERE Classroom.user_id=Users.user_id AND Classroom.subject_id = ? AND Classroom.user_type_id = 2", subject_id, function(error, results, fields) {
+    dbConn.query("SELECT Users.user_id,Users.user_name,Users.user_stdid FROM Classroom,Users WHERE Classroom.user_id=Users.user_id AND Classroom.subject_id = ? AND Classroom.user_type_id = 3", subject_id, function(error, results, fields) {
         if (error) throw error;
         if (results) {
             return res.send(results)
