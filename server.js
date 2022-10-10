@@ -213,23 +213,6 @@ app.post('/score/search', function(req, res) {
     });
 })
 
-app.post('/score/search/std', function(req, res) {
-    let data = req.body;
-    let subject_id = data['subject_id'];
-    console.log(subject_id);
-    if (!subject_id) {
-        return res.status(400).send({ error: true, message: 'Please provide student id' });
-    }
-    dbConn.query('SELECT Users.user_stdid,Users.user_name FROM Users,Classroom WHERE Classroom.user_id=Users.user_id AND Classroom.subject_id = ?', subject_id,
-        function(error, results, fields) {
-            if (error) throw error;
-            if (results[0]) {
-                return res.send(results[0]);
-            } else {
-                return res.status(400).send({ error: true, message: 'Student id Not Found!!' });
-            }
-        });
-})
 
 // Score : call subject
 app.post("/score/subject", function(req, res) {
