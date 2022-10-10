@@ -381,7 +381,7 @@ app.post("/subject/people/teacher", function(req, res) {
     let data = req.body;
     let subject_id = data['subject_id'];
     console.log("ดึงอาจารย์ : " + subject_id);
-    dbConn.query("SELECT Users.user_id,Users.user_name,Users.user_stdid FROM Classroom JOIN Users ON(Classroom.user_id=Users.user_id) WHERE ( Classroom.subject_id = ? AND Classroom.user_type_id = 1) OR ( Classroom.subject_id = ? AND Classroom.user_type_id = 2) ", [subject_id,subject_id], function(error, results, fields) {
+    dbConn.query("SELECT Users.user_id,Users.user_name,Users.user_stdid FROM Classroom JOIN Users ON(Classroom.user_id=Users.user_id) WHERE ( Classroom.subject_id = ? AND Classroom.user_type_id = 1) OR ( Classroom.subject_id = ? AND Classroom.user_type_id = 2) ", [subject_id, subject_id], function(error, results, fields) {
         if (error) throw error;
         if (results) {
             return res.send(results)
@@ -462,7 +462,7 @@ app.post('/subject/score', function(req, res) {
     let data = req.body;
     let subject_id = data['subject_id'];
     let user_id = data['user_id'];
-    dbConn.query('SELECT Score.score_id,Score.score_name,Score.create_at,Score_Student.score FROM Score,Score_Student WHERE Score.score_id=Score_Student.score_id AND Score.subject_id = ? AND Score_Student.user_id = ?', [subject_id, user_id], function(error, results, fields) {
+    dbConn.query('SELECT Score.score_id,Score.score_name,Score.create_at,Score_Student.score,Score.full_score FROM Score,Score_Student WHERE Score.score_id=Score_Student.score_id AND Score.subject_id = ? AND Score_Student.user_id = ?', [subject_id, user_id], function(error, results, fields) {
         if (error) throw error;
         if (results) {
             console.log(results)
