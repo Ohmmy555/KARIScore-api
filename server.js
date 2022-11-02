@@ -16,13 +16,7 @@ app.get("/", function(req, res) {
     return res.send({ error: true, message: "Welcome to KARI Web API", By: "KARI IT CP KKU 14" });
 });
 
-// connect Database
-var dbConn = mysql.createConnection({
-    host: "119.59.104.13",
-    user: "supphita",
-    password: "0646267404",
-    database: "supphita_kariscore",
-});
+
 
 // var dbConn = mysql.createConnection({
 //     host: "localhost",
@@ -30,6 +24,15 @@ var dbConn = mysql.createConnection({
 //     password: "",
 //     database: "Kariscore",
 // })
+
+var dbConn = mysql.createConnection({
+    host: "119.59.104.13",
+    user: "supphita",
+    password: "0648801344",
+    database: "supphita_kariscore",
+})
+
+
 
 // คำสั่งเชื่อมต่อ
 dbConn.connect();
