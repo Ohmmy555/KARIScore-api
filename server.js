@@ -18,19 +18,14 @@ app.get("/", function(req, res) {
 
 
 
-// var dbConn = mysql.createConnection({
-//     host: "localhost",
-//     user: "root",
-//     password: "",
-//     database: "Kariscore",
-// })
-
 var dbConn = mysql.createConnection({
-    host: "119.59.104.13",
-    user: "supphita",
-    password: "0648801344",
-    database: "supphita_kariscore",
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "Kariscore",
 })
+
+
 
 
 
